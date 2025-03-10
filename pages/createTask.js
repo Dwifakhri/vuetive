@@ -59,10 +59,13 @@ export default {
             <label>Date</label>
             <input v-model="task.date" type="date" required />
           </div>
-          <button type="submit" class="btn btn-secondary btn-with-loading" :disabled="loading">
-            <div class="loading loading-btn" v-if="loadingSubmit"/>
-            <span>{{ loadingSubmit ? "Saving" :(type === "edit" ? "Update" : "Create") }}</span>
-          </button>
+          <div class="form-actions">
+            <button type="button" class="btn btn-link-secondary" :disabled="loadingSubmit" @click="$router.push('/task')">Cancel</button>
+            <button type="submit" class="btn btn-secondary btn-with-loading" :disabled="loadingSubmit">
+              <div class="loading loading-btn" v-if="loadingSubmit"/>
+              <span>{{ loadingSubmit ? "Saving" :(type === "edit" ? "Update" : "Create") }}</span>
+            </button>
+          </div>
         </form>
       </section>
     </main>

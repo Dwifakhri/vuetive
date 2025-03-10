@@ -1,19 +1,33 @@
-const { ref } = Vue;
+const { ref, onMounted, onUnmounted } = Vue;
 const { useRouter } = VueRouter;
 export default {
   setup() {
     const route = useRouter().currentRoute.value.path;
     const menuOpen = ref(false);
+    const isScrolled = ref(false);
 
     const toggleMenu = () => {
       menuOpen.value = !menuOpen.value;
     };
 
-    return { route, menuOpen, toggleMenu };
+    const handleScroll = () => {
+      isScrolled.value = window.scrollY > 75;
+    };
+
+    onMounted(() => {
+      window.addEventListener("scroll", handleScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
+
+    return { route, menuOpen, toggleMenu, isScrolled };
   },
-  template: `<nav>
+  template: `<nav :class="{ 'scrolled': isScrolled }">
         <router-link to="/">
-          <img src="../assets/logo.svg" alt="logo" height="45" width="110" />
+          <img v-if="!isScrolled" src="../assets/logo.svg" alt="logo" height="45" width="110" />
+          <img v-else src="../assets/logo-black.svg" alt="logo" height="45" width="110" />
         </router-link>
         <div class="btn-toggle" @click="toggleMenu">
          <img v-if="!menuOpen" src="../assets/menu.svg" alt="menu"  />
